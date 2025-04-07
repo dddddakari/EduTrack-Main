@@ -20,7 +20,7 @@ const CalendarScreen = () => {
           arrowColor: "#58355E",
           monthTextColor: "#58355E",
         }}
-        onDayPress={(day) => setSelectedDate(day.dateString)}
+        onDayPress={(day: { dateString: React.SetStateAction<null>; }) => setSelectedDate(day.dateString)}
         markedDates={{
           ...(selectedDate ? { [selectedDate]: { selected: true, selectedColor: "#17C3B2" } } : {}),
         }}
