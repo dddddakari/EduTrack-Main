@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { View, Text, TouchableOpacity, StyleSheet, Image } from "react-native";
 import { Calendar } from "react-native-calendars";
 import { AntDesign } from "@expo/vector-icons";
+import Fontisto from '@expo/vector-icons/Fontisto';
 
 const CalendarScreen = () => {
   const [selectedDate, setSelectedDate] = useState(null);
@@ -26,7 +27,7 @@ const CalendarScreen = () => {
         }}
       />
       <View style={styles.footer}>
-        <Image source={require("@/assets/images/favicon.png")} style={styles.image} /> /* Placeholder image */
+      <Fontisto name="smiling" size={50} color="#58355E"/>
         <Text style={styles.text}>You have a free day</Text>
         <Text style={styles.subtext}>Take it easy</Text>
       </View>
@@ -48,7 +49,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     marginTop: 20,
   },
-  image: {
+  Fontisto: {
     width: 80,
     height: 80,
     marginBottom: 10,
@@ -57,6 +58,7 @@ const styles = StyleSheet.create({
     color: "#58355E",
     fontSize: 18,
     fontWeight: "bold",
+    paddingTop: 20,
   },
   subtext: {
     color: "#58355E",

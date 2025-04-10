@@ -1,22 +1,21 @@
 import { Tabs } from 'expo-router';
 import React from 'react';
-import { Platform } from 'react-native';
-import { StyleSheet } from 'react-native';
+import { Platform, useColorScheme } from 'react-native';
 
 import { HapticTab } from '@/components/HapticTab';
-import { IconSymbol } from '@/components/ui/IconSymbol';
 import Ionicons from '@expo/vector-icons/Ionicons';
+import { IconSymbol } from '@/components/ui/IconSymbol';
+import FontAwesome from '@expo/vector-icons/FontAwesome';
 import TabBarBackground from '@/components/ui/TabBarBackground';
 import { Colors } from '@/constants/Colors';
-import { useColorScheme } from '@/hooks/useColorScheme';
 
 export default function TabLayout() {
-  const colorScheme = useColorScheme();
+  const colorScheme = useColorScheme(); // Get the current color scheme (light/dark)
 
   return (
     <Tabs
       screenOptions={{
-        tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
+        tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint, // Set active tint color based on theme
         headerShown: false,
         tabBarButton: HapticTab,
         tabBarBackground: TabBarBackground,
@@ -24,9 +23,12 @@ export default function TabLayout() {
           ios: {
             position: 'absolute',
           },
-          default: {},
+          default: {
+            backgroundColor: Colors[colorScheme ?? 'light'].background, // Set background color based on theme
+          },
         }),
-      }}>
+      }}
+    >
       <Tabs.Screen
         name="index"
         options={{
@@ -38,14 +40,14 @@ export default function TabLayout() {
         name="calendar"
         options={{
           title: 'Calendar',
-          tabBarIcon: ({ color }) => <    Ionicons size={28} name="calendar-clear-sharp" color={color} />,
+          tabBarIcon: ({ color }) => <Ionicons name="calendar-clear" size={24} color={color} />,
         }}
       />
       <Tabs.Screen
-        name="settings"
+        name="settingsscreen"
         options={{
           title: 'Settings',
-          tabBarIcon: ({ color }) => <Ionicons size={28} name="settings" color={color} />,
+          tabBarIcon: ({ color }) => <FontAwesome name="gear" size={24} color={color} />,
         }}
       />
     </Tabs>
