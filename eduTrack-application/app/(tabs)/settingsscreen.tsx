@@ -7,6 +7,9 @@ import Pricing from "../../components/Pricing";
 import DateAndTime from "../../components/DateAndTime";
 import HelpAndFeedback from "../../components/HelpAndFeedback";
 import { useSettings } from '../context/SettingContext';
+import FollowUs from "../../components/Followus";
+import About from "../../components/About";
+import Notifications from "../../components/Notifications";
 
 const SettingsScreen = () => {
   const [activeSection, setActiveSection] = useState<string | null>(null);
@@ -18,7 +21,7 @@ const SettingsScreen = () => {
         return <General />;
       case "Pricing":
         return <Pricing />;
-      case ;"SoundsAndNotifications":
+      case "SoundsAndNotifications":
         return <Notifications />;
       case "DateAndTime":
         return <DateAndTime />;
@@ -70,14 +73,15 @@ const SettingsScreen = () => {
             onPress={() => setActiveSection("Pricing")}
           />
           <SettingsItem
-            icon="musical-notes-outline"
-            label="Sounds & Notifications"
-          />
-          <SettingsItem
             icon="time-outline"
             label="Date & Time"
             onPress={() => setActiveSection("DateAndTime")}
           />
+          <SettingsItem
+          icon="musical-notes-outline"
+          label="Sounds & Notifications"
+          onPress={() => setActiveSection("SoundsAndNotifications")}
+        />
         </View>
       )}
 
@@ -88,8 +92,16 @@ const SettingsScreen = () => {
             label="Help & Feedback"
             onPress={() => setActiveSection("HelpAndFeedback")}
           />
-          <SettingsItem icon="people-outline" label="Follow Us" />
-          <SettingsItem icon="information-circle-outline" label="About" />
+        <SettingsItem
+          icon="people-outline"
+          label="Follow Us"
+          onPress={() => setActiveSection("FollowUs")}
+        />
+        <SettingsItem
+          icon="information-circle-outline"
+          label="About"
+          onPress={() => setActiveSection("About")}
+        />
         </View>
       )}
     </View>
