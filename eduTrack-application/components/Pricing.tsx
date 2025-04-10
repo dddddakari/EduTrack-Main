@@ -1,14 +1,30 @@
 import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, Button } from 'react-native';
+import { useNavigation } from 'expo-router';
+import { Colors } from '@/constants/Colors'; // Assuming you're using this for colors
 
-const General = () => {
+export default function PricingPage() {
+  const navigation = useNavigation();
+
   return (
-    <View style={styles.container}>
-      <Text style={styles.header}>General Settings</Text>
-      <Text style={styles.text}>Modify general preferences here.</Text>
+    <View style={[styles.container, { backgroundColor: Colors.light.background }]}>
+      <Text style={[styles.title, { color: Colors.light.text }]}>Our Ridiculous Pricing</Text>
+
+      <View style={styles.pricingContainer}>
+        <Text style={[styles.price, { color: Colors.light.tint }]}>Gold Plan: $1,000,000</Text>
+        <Text style={[styles.price, { color: Colors.light.tint }]}>Platinum Plan: $5,000,000</Text>
+        <Text style={[styles.price, { color: Colors.light.tint }]}>Diamond Plan: $10,000,000</Text>
+        <Text style={[styles.price, { color: Colors.light.tint }]}>Super Ultra Mega Plan: $50,000,000</Text>
+      </View>
+
+      <Button
+        title="Go Back"
+        onPress={() => navigation.goBack()}
+        color={Colors.light.tint}
+      />
     </View>
   );
-};
+}
 
 const styles = StyleSheet.create({
   container: {
@@ -17,16 +33,17 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     padding: 20,
   },
-  header: {
-    fontSize: 24,
+  title: {
+    fontSize: 30,
     fontWeight: 'bold',
-    color: '#58355E',
+    marginBottom: 20,
   },
-  text: {
-    fontSize: 16,
-    color: '#58355E',
-    marginTop: 10,
+  pricingContainer: {
+    marginBottom: 30,
+  },
+  price: {
+    fontSize: 24,
+    marginVertical: 10,
+    fontWeight: '700',
   },
 });
-
-export default General;
