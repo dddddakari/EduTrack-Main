@@ -18,10 +18,16 @@ const SettingsScreen = () => {
         return <General />;
       case "Pricing":
         return <Pricing />;
+      case ;"SoundsAndNotifications":
+        return <Notifications />;
       case "DateAndTime":
         return <DateAndTime />;
       case "HelpAndFeedback":
         return <HelpAndFeedback />;
+        case "FollowUs":
+        return <FollowUs />;
+      case "About":
+        return <About />;
       default:
         return null;
     }
