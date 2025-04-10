@@ -1,21 +1,25 @@
+// app/index.tsx
 import React from "react";
 import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import Fab from "@/components/edubutton";
+import { useSettings } from '../context/SettingContext';
 
 const InboxScreen = () => {
+  const { colors } = useSettings();
+
   return (
-    <View style={styles.container}>
-      <Text style={styles.header}>Tasks</Text>
+    <View style={[styles.container, { backgroundColor: colors.background }]}>
+      <Text style={[styles.header, { color: colors.text }]}>Tasks</Text>
 
       <View style={styles.content}>
-        <Ionicons name="grid" size={60} color="#17C3B2" />
-        <Text style={styles.title}>New Tasks</Text>
-        <Text style={styles.description}>
+        <Ionicons name="grid" size={60} color={colors.tint} />
+        <Text style={[styles.title, { color: colors.text }]}>New Tasks</Text>
+        <Text style={[styles.description, { color: colors.text }]}>
           It's time to set a new task! Start Now!
         </Text>
 
-        <TouchableOpacity style={styles.newTaskButton}>
+        <TouchableOpacity style={[styles.newTaskButton, { backgroundColor: colors.tint }]}>
           <Ionicons name="add-circle" size={20} color="white" />
           <Text style={styles.newTaskText}>New Inbox Task</Text>
         </TouchableOpacity>
@@ -29,14 +33,12 @@ const InboxScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#D4D2D5",
     padding: 20,
     paddingTop: 50
   },
   header: {
     fontSize: 28,
     fontWeight: "bold",
-    color: "#58355E",
   },
   content: {
     alignItems: "center",
@@ -46,18 +48,15 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 18,
     fontWeight: "bold",
-    color: "#58355E",
     marginTop: 10,
   },
   description: {
     textAlign: "center",
-    color: "#58355E",
     marginVertical: 10,
   },
   newTaskButton: {
     flexDirection: "row",
     alignItems: "center",
-    backgroundColor: "#17C3B2",
     padding: 12,
     borderRadius: 12,
     marginTop: 20,
@@ -76,7 +75,6 @@ const styles = StyleSheet.create({
     position: "absolute",
     bottom: 20,
     right: 20,
-    color: "#17C3B2",
   },
 });
 

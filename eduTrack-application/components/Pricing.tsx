@@ -1,13 +1,9 @@
 import React from 'react';
 import { View, Text, StyleSheet, Pressable, ScrollView } from 'react-native';
-import { useNavigation } from 'expo-router';
-import { Colors } from '@/constants/Colors';
-import { useColorScheme } from '@/hooks/useColorScheme';
+import { useSettings } from '../app/context/SettingContext';
 
 export default function PricingPage() {
-  const navigation = useNavigation();
-  const colorScheme = useColorScheme();
-  const theme = Colors[colorScheme ?? 'light'];
+  const { colors } = useSettings();
 
   const plans = [
     {
@@ -33,22 +29,22 @@ export default function PricingPage() {
   ];
 
   return (
-    <ScrollView style={{ backgroundColor: theme.background }}>
-      <Text style={[styles.title, { color: theme.text }]}>Our Ridiculous Pricing</Text>
+    <ScrollView style={{ backgroundColor: colors.background }}>
+      <Text style={[styles.title, { color: colors.text }]}>Our Modest Pricing</Text>
 
       {plans.map((plan, index) => (
         <View
           key={index}
-          style={[styles.card, { backgroundColor: colorScheme === 'dark' ? '#222' : '#fff', borderColor: theme.tint }]}
+          style={[styles.card, { backgroundColor: colors.cardBackground, borderColor: colors.tint }]}
         >
-          <Text style={[styles.planTitle, { color: theme.tint }]}>{plan.title}</Text>
-          <Text style={[styles.price, { color: theme.text }]}>{plan.price}</Text>
-          <Text style={[styles.description, { color: theme.text }]}>{plan.description}</Text>
+          <Text style={[styles.planTitle, { color: colors.tint }]}>{plan.title}</Text>
+          <Text style={[styles.price, { color: colors.text }]}>{plan.price}</Text>
+          <Text style={[styles.description, { color: colors.text }]}>{plan.description}</Text>
           <Pressable
             style={({ pressed }) => [
               styles.button,
               {
-                backgroundColor: pressed ? theme.tabIconDefault : theme.tint,
+                backgroundColor: pressed ? colors.tabIconDefault : colors.tint,
               },
             ]}
             onPress={() => alert(`Subscribed to ${plan.title}`)}
@@ -57,10 +53,6 @@ export default function PricingPage() {
           </Pressable>
         </View>
       ))}
-
-      <Pressable style={styles.backButton} onPress={() => navigation.goBack()}>
-        <Text style={{ color: theme.tint }}>← Go Back</Text>
-      </Pressable>
     </ScrollView>
   );
 }

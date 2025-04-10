@@ -1,18 +1,17 @@
+// app/settingsscreen.tsx
 import React, { useState } from "react";
 import { View, Text, TouchableOpacity, StyleSheet, Image, Button } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
-
-// Import the components for each section
 import General from "../../components/General";
 import Pricing from "../../components/Pricing";
 import DateAndTime from "../../components/DateAndTime";
 import HelpAndFeedback from "../../components/HelpAndFeedback";
+import { useSettings } from '../context/SettingContext';
 
 const SettingsScreen = () => {
-  // State to track the active section
   const [activeSection, setActiveSection] = useState<string | null>(null);
+  const { colors } = useSettings();
 
-  // Function to render the active section
   const renderActiveSection = () => {
     switch (activeSection) {
       case "General":
@@ -29,34 +28,31 @@ const SettingsScreen = () => {
   };
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.header}>Settings</Text>
+    <View style={[styles.container, { backgroundColor: colors.background }]}>
+      <Text style={[styles.header, { color: colors.text }]}>Settings</Text>
 
-      {/* Only render the profile section if there's no active section */}
       {!activeSection && (
-        <TouchableOpacity style={styles.profileSection}>
+        <TouchableOpacity style={[styles.profileSection, { backgroundColor: colors.cardBackground }]}>
           <Image
-            source={require("@/assets/images/placeholder.jpg")} // Replace with your profile image path
+            source={require("@/assets/images/placeholder.jpg")}
             style={styles.profileImage}
           />
-          <Text style={styles.signInText}>Sign in or Sign up</Text>
-          <Ionicons name="chevron-forward" size={20} color="#17C3B2" />
+          <Text style={[styles.signInText, { color: colors.text }]}>Sign in or Sign up</Text>
+          <Ionicons name="chevron-forward" size={20} color={colors.tint} />
         </TouchableOpacity>
       )}
 
-      {/* If an active section is selected, show the section instead of the settings list */}
       {activeSection ? (
         <View style={styles.sectionContainer}>
           <Button
             title="Back To Settings"
-            color="#17C3B2"
-            onPress={() => setActiveSection(null)} // Go back to the settings list
+            color={colors.tint}
+            onPress={() => setActiveSection(null)}
           />
           {renderActiveSection()}
         </View>
       ) : (
-        // Settings List
-        <View style={styles.settingsList}>
+        <View style={[styles.settingsList, { backgroundColor: colors.cardBackground }]}>
           <SettingsItem
             icon="settings-outline"
             label="General"
@@ -79,9 +75,8 @@ const SettingsScreen = () => {
         </View>
       )}
 
-      {/* Other Sections */}
       {!activeSection && (
-        <View style={styles.settingsList}>
+        <View style={[styles.settingsList, { backgroundColor: colors.cardBackground }]}>
           <SettingsItem
             icon="help-circle-outline"
             label="Help & Feedback"
@@ -95,22 +90,25 @@ const SettingsScreen = () => {
   );
 };
 
-const SettingsItem = ({ icon, label, onPress }: any) => (
-  <TouchableOpacity
-    style={styles.settingsItem}
-    onPress={onPress} // Trigger the onPress function passed as a prop
-  >
-    <Ionicons name={icon} size={24} color="#17C3B2" />
-    <Text style={styles.settingsLabel}>{label}</Text>
-    <Ionicons name="chevron-forward" size={20} color="#17C3B2" />
-  </TouchableOpacity>
-);
+const SettingsItem = ({ icon, label, onPress }: any) => {
+  const { colors } = useSettings();
+  
+  return (
+    <TouchableOpacity
+      style={[styles.settingsItem, { borderBottomColor: colors.tint }]}
+      onPress={onPress} 
+    >
+      <Ionicons name={icon} size={24} color={colors.tint} />
+      <Text style={[styles.settingsLabel, { color: colors.text }]}>{label}</Text>
+      <Ionicons name="chevron-forward" size={20} color={colors.tint} />
+    </TouchableOpacity>
+  );
+};
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 20,
-    backgroundColor: "#D4D2D5",
     paddingTop: 50,
   },
   header: {
@@ -118,12 +116,10 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     textAlign: "center",
     marginBottom: 20,
-    color: "#58355E",
   },
   profileSection: {
     flexDirection: "row",
     alignItems: "center",
-    backgroundColor: "white",
     padding: 15,
     borderRadius: 10,
     marginBottom: 20,
@@ -142,10 +138,8 @@ const styles = StyleSheet.create({
     flex: 1,
     fontSize: 18,
     fontWeight: "600",
-    color: "#58355E",
   },
   settingsList: {
-    backgroundColor: "white",
     borderRadius: 10,
     paddingVertical: 10,
     marginBottom: 20,
@@ -159,13 +153,11 @@ const styles = StyleSheet.create({
     alignItems: "center",
     padding: 15,
     borderBottomWidth: 1,
-    borderBottomColor: "#E5E5E5",
   },
   settingsLabel: {
     flex: 1,
     fontSize: 16,
     marginLeft: 10,
-    color: "#58355E",
   },
   sectionContainer: {
     flex: 1,

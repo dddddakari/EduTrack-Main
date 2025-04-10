@@ -1,51 +1,43 @@
-import React, { useState } from 'react';
-import { View, Text, StyleSheet, Switch, Button } from 'react-native';
-import { Picker } from '@react-native-picker/picker';
+import React, { useContext } from "react";
+import { View, Text, StyleSheet, Switch, ScrollView } from "react-native";
+import { SettingsContext } from "../app/context/SettingContext";
 
 const General = () => {
-  // State to manage settings
-  const [isDarkMode, setIsDarkMode] = useState(false);
-  const [fontSize, setFontSize] = useState('medium');
-  const [showHints, setShowHints] = useState(false);
+  const context = useContext(SettingsContext);
 
-  const handleDarkModeToggle = () => setIsDarkMode((prev) => !prev);
-  const handleFontSizeChange = (value: string) => setFontSize(value);
-  const handleHintsToggle = () => setShowHints((prev) => !prev);
+  if (!context) {
+    return null; // Handle case when context is not available
+  }
+
+  const {
+    isDarkMode,
+    setIsDarkMode,
+  } = context;
 
   return (
     <View style={[styles.container, isDarkMode && styles.darkContainer]}>
-      <Text style={[styles.header, isDarkMode && styles.darkText]}>General Settings</Text>
-      <Text style={[styles.text, isDarkMode && styles.darkText]}>Modify general preferences here.</Text>
+      <Text style={[styles.title, isDarkMode && styles.darkText]}>General Settings</Text>
 
-      {/* Dark Mode Toggle */}
-      <View style={styles.settingItem}>
-        <Text style={[styles.settingLabel, isDarkMode && styles.darkText]}>Dark Mode</Text>
-        <Switch value={isDarkMode} onValueChange={handleDarkModeToggle} />
+      <View style={styles.setting}>
+        <Text style={[styles.label, isDarkMode && styles.darkText]}>Dark Mode</Text>
+        <Switch
+          value={isDarkMode}
+          onValueChange={() => setIsDarkMode(!isDarkMode)}
+        />
       </View>
 
-      {/* Font Size Selection */}
-      <View style={styles.settingItem}>
-        <Text style={[styles.settingLabel, isDarkMode && styles.darkText]}>Font Size</Text>
-        <Picker
-          selectedValue={fontSize}
-          style={[styles.picker, isDarkMode && styles.darkText]}
-          onValueChange={handleFontSizeChange}
-        >
-          <Picker.Item label="Small" value="small" />
-          <Picker.Item label="Medium" value="medium" />
-          <Picker.Item label="Large" value="large" />
-        </Picker>
-      </View>
+      <View style={[styles.landAcknowledgment, isDarkMode && styles.darkLandAcknowledgment]}>
+        <Text style={[styles.title, isDarkMode && styles.darkText]}>Land Acknowledgment</Text>
+        
+        {/* Add ScrollView to make the acknowledgment text scrollable */}
+        <ScrollView>
+          <Text style={[styles.landText, isDarkMode && styles.darkText]}>
+            In the spirit of respect, reciprocity and truth, we honour and acknowledge Moh’kinsstis, and the traditional Treaty 7 territory and oral practices of the Blackfoot confederacy: Siksika, Kainai, Piikani, Stoney Nakoda Nations: Chiniki, Bearspaw, Goodstoney and Tsuut’ina Nation. We acknowledge that this territory is home to the Otipemisiwak Métis Government of the Métis Nation within Alberta Districts 5 and 6. Finally, we acknowledge all Nations – Indigenous and non – who live, work and play on this land, and who honour and celebrate this territory.
 
-      {/* Apply Changes Button */}
-      <Button
-        title="Apply Changes"
-        color="#17C3B2"
-        onPress={() => {
-          // Apply changes or save preferences
-          console.log('Settings Applied:', { isDarkMode, fontSize });
-        }}
-      />
+            This sacred gathering place provides us with an opportunity to engage in and demonstrate leadership on reconciliation. Thank you for your enthusiasm and commitment to join our team on the lands of Treaty 7 territory.
+          </Text>
+        </ScrollView>
+      </View>
     </View>
   );
 };
@@ -53,42 +45,42 @@ const General = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'flex-start',
-    alignItems: 'flex-start',
     padding: 20,
-    backgroundColor: '#D4D2D5',
+    backgroundColor: "#f0f0f0",
   },
   darkContainer: {
-    backgroundColor: '#333',
+    backgroundColor: "#333",
   },
-  header: {
+  title: {
     fontSize: 24,
-    fontWeight: 'bold',
-    color: '#58355E',
+    fontWeight: "bold",
     marginBottom: 20,
   },
   darkText: {
-    color: '#fff',
+    color: "#fff",
   },
-  text: {
-    fontSize: 16,
-    color: '#58355E',
+  setting: {
+    flexDirection: "row",
+    alignItems: "center",
     marginBottom: 20,
   },
-  settingItem: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    width: '100%',
-    marginBottom: 20,
-  },
-  settingLabel: {
+  label: {
+    flex: 1,
     fontSize: 18,
-    color: '#58355E',
   },
-  picker: {
-    height: 100,
-    width: 200,
+  landAcknowledgment: {
+    marginTop: 30,
+    padding: 10,
+    borderRadius: 5,
+    maxHeight: 500,
+    marginBottom: 30,
+  },
+  darkLandAcknowledgment: {
+    backgroundColor: "#555",
+  },
+  landText: {
+    fontSize: 16,
+    fontStyle: "italic",
   },
 });
 
