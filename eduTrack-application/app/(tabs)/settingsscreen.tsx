@@ -1,7 +1,5 @@
-// app/settingsscreen.tsx
 import React, { useState } from "react";
-import { View, Text, TouchableOpacity, StyleSheet, Image, Button } from "react-native";
-import { Ionicons } from "@expo/vector-icons";
+import { View, Text, TouchableOpacity, StyleSheet, Image } from "react-native";
 import General from "../../components/General";
 import Pricing from "../../components/Pricing";
 import DateAndTime from "../../components/DateAndTime";
@@ -10,10 +8,12 @@ import { useSettings } from '../context/SettingContext';
 import FollowUs from "../../components/Followus";
 import About from "../../components/About";
 import Notifications from "../../components/Notifications";
+import AuthModal from '../../components/auth';
 
 const SettingsScreen = () => {
   const [activeSection, setActiveSection] = useState<string | null>(null);
-  const { colors } = useSettings();
+  const [authModalVisible, setAuthModalVisible] = useState(false);
+  const { colors, user, logout } = useSettings();
 
   const renderActiveSection = () => {
     switch (activeSection) {
@@ -27,7 +27,7 @@ const SettingsScreen = () => {
         return <DateAndTime />;
       case "HelpAndFeedback":
         return <HelpAndFeedback />;
-        case "FollowUs":
+      case "FollowUs":
         return <FollowUs />;
       case "About":
         return <About />;
@@ -41,74 +41,95 @@ const SettingsScreen = () => {
       <Text style={[styles.header, { color: colors.text }]}>Settings</Text>
 
       {!activeSection && (
-        <TouchableOpacity style={[styles.profileSection, { backgroundColor: colors.cardBackground }]}>
+        <TouchableOpacity 
+          style={[styles.profileSection, { backgroundColor: colors.cardBackground }]}
+          onPress={user ? undefined : () => setAuthModalVisible(true)}
+        >
           <Image
-            source={require("@/assets/images/placeholder.jpg")}
+            source={user?.profileImage || require("@/assets/images/placeholder.jpg")}
             style={styles.profileImage}
           />
-          <Text style={[styles.signInText, { color: colors.text }]}>Sign in or Sign up</Text>
+          {user ? (
+            <View style={styles.userInfo}>
+              <Text style={[styles.userName, { color: colors.text }]}>Hello, {user.name}</Text>
+              <TouchableOpacity onPress={logout}>
+                <Text style={[styles.logoutText, { color: colors.tint }]}>Logout</Text>
+              </TouchableOpacity>
+            </View>
+          ) : (
+            <Text style={[styles.signInText, { color: colors.text }]}>Sign in or Sign up</Text>
+          )}
           <Ionicons name="chevron-forward" size={20} color={colors.tint} />
         </TouchableOpacity>
       )}
 
       {activeSection ? (
         <View style={styles.sectionContainer}>
-          <Button
-            title="Back To Settings"
-            color={colors.tint}
+          <TouchableOpacity
+            style={[styles.backButton, { backgroundColor: colors.tint }]}
             onPress={() => setActiveSection(null)}
-          />
+          >
+            <Ionicons name="arrow-back" size={20} color="white" />
+            <Text style={styles.backButtonText}>Back To Settings</Text>
+          </TouchableOpacity>
           {renderActiveSection()}
         </View>
       ) : (
-        <View style={[styles.settingsList, { backgroundColor: colors.cardBackground }]}>
-          <SettingsItem
-            icon="settings-outline"
-            label="General"
-            onPress={() => setActiveSection("General")}
-          />
-          <SettingsItem
-            icon="diamond-outline"
-            label="Pricing"
-            onPress={() => setActiveSection("Pricing")}
-          />
-          <SettingsItem
-            icon="time-outline"
-            label="Date & Time"
-            onPress={() => setActiveSection("DateAndTime")}
-          />
-          <SettingsItem
-          icon="musical-notes-outline"
-          label="Sounds & Notifications"
-          onPress={() => setActiveSection("SoundsAndNotifications")}
-        />
-        </View>
+        <>
+          <View style={[styles.settingsList, { backgroundColor: colors.cardBackground }]}>
+            <SettingsItem
+              icon="settings-outline"
+              label="General"
+              onPress={() => setActiveSection("General")}
+            />
+            <SettingsItem
+              icon="diamond-outline"
+              label="Pricing"
+              onPress={() => setActiveSection("Pricing")}
+            />
+            <SettingsItem
+              icon="time-outline"
+              label="Date & Time"
+              onPress={() => setActiveSection("DateAndTime")}
+            />
+            <SettingsItem
+              icon="musical-notes-outline"
+              label="Sounds & Notifications"
+              onPress={() => setActiveSection("SoundsAndNotifications")}
+            />
+          </View>
+
+          <View style={[styles.settingsList, { backgroundColor: colors.cardBackground }]}>
+            <SettingsItem
+              icon="help-circle-outline"
+              label="Help & Feedback"
+              onPress={() => setActiveSection("HelpAndFeedback")}
+            />
+            <SettingsItem
+              icon="people-outline"
+              label="Follow Us"
+              onPress={() => setActiveSection("FollowUs")}
+            />
+            <SettingsItem
+              icon="information-circle-outline"
+              label="About"
+              onPress={() => setActiveSection("About")}
+            />
+          </View>
+        </>
       )}
 
-      {!activeSection && (
-        <View style={[styles.settingsList, { backgroundColor: colors.cardBackground }]}>
-          <SettingsItem
-            icon="help-circle-outline"
-            label="Help & Feedback"
-            onPress={() => setActiveSection("HelpAndFeedback")}
-          />
-        <SettingsItem
-          icon="people-outline"
-          label="Follow Us"
-          onPress={() => setActiveSection("FollowUs")}
-        />
-        <SettingsItem
-          icon="information-circle-outline"
-          label="About"
-          onPress={() => setActiveSection("About")}
-        />
-        </View>
-      )}
+      <AuthModal 
+        visible={authModalVisible} 
+        onClose={() => setAuthModalVisible(false)} 
+      />
     </View>
   );
 };
 
-const SettingsItem = ({ icon, label, onPress }: any) => {
+import { Ionicons } from "@expo/vector-icons";
+
+const SettingsItem = ({ icon, label, onPress }: { icon: keyof typeof Ionicons.glyphMap; label: string; onPress: () => void }) => {
   const { colors } = useSettings();
   
   return (
@@ -157,6 +178,18 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: "600",
   },
+  userInfo: {
+    flex: 1,
+  },
+  userName: {
+    fontSize: 18,
+    fontWeight: '600',
+  },
+  logoutText: {
+    fontSize: 14,
+    marginTop: 4,
+    color: '#17C3B2',
+  },
   settingsList: {
     borderRadius: 10,
     paddingVertical: 10,
@@ -179,6 +212,19 @@ const styles = StyleSheet.create({
   },
   sectionContainer: {
     flex: 1,
+  },
+  backButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    padding: 12,
+    borderRadius: 8,
+    margin: 15,
+    justifyContent: 'center',
+  },
+  backButtonText: {
+    color: 'white',
+    fontWeight: 'bold',
+    marginLeft: 8,
   },
 });
 
