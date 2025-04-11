@@ -1,7 +1,7 @@
 // components/AuthModal.tsx
 import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, Modal, Alert } from 'react-native';
-import { useSettings } from '../app/context/SettingContext';
+import { useSettings } from '../context/SettingContext';
 import { Ionicons } from '@expo/vector-icons';
 
 const AuthModal = ({ visible, onClose }: { visible: boolean; onClose: () => void }) => {

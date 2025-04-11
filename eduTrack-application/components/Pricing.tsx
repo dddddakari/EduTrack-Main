@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Text, StyleSheet, Pressable, ScrollView } from 'react-native';
-import { useSettings } from '../app/context/SettingContext';
+import { useSettings } from '../context/SettingContext';
 
 export default function PricingPage() {
   const { colors } = useSettings();

@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, Text, StyleSheet, Linking, TouchableOpacity } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { useSettings } from '../app/context/SettingContext';
+import { useSettings } from '../context/SettingContext';
 
 const About = () => {
   const { colors } = useSettings();

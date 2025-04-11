@@ -2,7 +2,7 @@
 import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { useSettings } from '../app/context/SettingContext';
+import { useSettings } from '../context/SettingContext';
 
 const TaskItem = ({ task, onToggle, onDelete }: { 
   task: any; 

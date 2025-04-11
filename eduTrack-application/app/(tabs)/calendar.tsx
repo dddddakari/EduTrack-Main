@@ -3,7 +3,7 @@ import { View, Text, TouchableOpacity, StyleSheet, ScrollView } from "react-nati
 import { Calendar } from "react-native-calendars";
 import { AntDesign } from "@expo/vector-icons";
 import Fontisto from "@expo/vector-icons/Fontisto";
-import { useSettings } from "../context/SettingContext";
+import { useSettings } from "../../context/SettingContext";
 import TaskItem from "../../components/TaskItem";
 
 const CalendarScreen = () => {

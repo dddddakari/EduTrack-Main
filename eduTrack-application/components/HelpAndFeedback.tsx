@@ -3,7 +3,7 @@ import React from 'react';
 import { View, Text, StyleSheet, ScrollView, Pressable, Alert, Linking } from 'react-native';
 import { useColorScheme } from '@/hooks/useColorScheme';
 import { Colors } from '@/constants/Colors';
-import { useSettings } from '../app/context/SettingContext';
+import { useSettings } from '../context/SettingContext';
 
 export default function HelpAndFeedback() {
   const { colors } = useSettings();

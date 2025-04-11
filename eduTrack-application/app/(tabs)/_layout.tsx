@@ -7,7 +7,7 @@ import Ionicons from '@expo/vector-icons/Ionicons';
 import { IconSymbol } from '@/components/ui/IconSymbol';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import TabBarBackground from '@/components/ui/TabBarBackground';
-import { useSettings } from '../context/SettingContext';
+import { useSettings } from '../../context/SettingContext';
 
 export default function TabLayout() {
   const { colors } = useSettings();

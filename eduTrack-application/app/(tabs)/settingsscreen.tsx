@@ -4,7 +4,7 @@ import General from "../../components/General";
 import Pricing from "../../components/Pricing";
 import DateAndTime from "../../components/DateAndTime";
 import HelpAndFeedback from "../../components/HelpAndFeedback";
-import { useSettings } from '../context/SettingContext';
+import { useSettings } from '../../context/SettingContext';
 import FollowUs from "../../components/Followus";
 import About from "../../components/About";
 import Notifications from "../../components/Notifications";

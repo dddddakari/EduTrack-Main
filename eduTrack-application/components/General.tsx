@@ -1,6 +1,6 @@
 import React, { useContext } from "react";
 import { View, Text, StyleSheet, Switch, ScrollView } from "react-native";
-import { SettingsContext } from "../app/context/SettingContext";
+import { SettingsContext } from "../context/SettingContext";
 
 const General = () => {
   const context = useContext(SettingsContext);

@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, StatusBar } from 'react-native';
-import { SettingsProvider, useSettings } from './context/SettingContext';
+import { SettingsProvider, useSettings } from '../context/SettingContext';
 import { Slot } from 'expo-router';
 
 const LayoutContent = () => {
