@@ -4,6 +4,13 @@ import { View, Text, TextInput, TouchableOpacity, StyleSheet, Modal, Alert } fro
 import { useSettings } from '../context/SettingContext';
 import { Ionicons } from '@expo/vector-icons';
 
+// This component handles user authentication (login/signup) in a modal.
+// It includes input fields for email, password, and name (for signup).
+// It also includes a toggle to switch between login and signup modes.
+// The component uses the useSettings context to manage user state and theme colors.
+// The handleAuth function validates the input fields and sets the user state on successful authentication.
+
+
 const AuthModal = ({ visible, onClose }: { visible: boolean; onClose: () => void }) => {
   const { colors, setUser } = useSettings();
   const [isLogin, setIsLogin] = useState(true);

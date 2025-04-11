@@ -10,11 +10,21 @@ import About from "../../components/About";
 import Notifications from "../../components/Notifications";
 import AuthModal from "../../components/auth";
 
+
+
+// settings screen component
+// This component is responsible for rendering the settings screen of the application
+// It includes various settings options and handles user authentication
+// It uses the useSettings context to manage user state and theme colors
+// It also includes a modal for user authentication
+
 const SettingsScreen = () => {
   const [activeSection, setActiveSection] = useState<string | null>(null);
   const [authModalVisible, setAuthModalVisible] = useState(false);
   const { colors, user, logout } = useSettings();
 
+  // Function to render the active section based on the user's selection
+  // It uses a switch statement to determine which component to render
   const renderActiveSection = () => {
     switch (activeSection) {
       case "General":
@@ -36,10 +46,12 @@ const SettingsScreen = () => {
     }
   };
 
+  // Main component render
   return (
     <View style={[styles.container, { backgroundColor: colors.background }]}>
       <Text style={[styles.header, { color: colors.text }]}>Settings</Text>
 
+      {/* Profile section with user information or sign-in prompt */}
       {!activeSection && (
         <TouchableOpacity
           style={[
@@ -54,6 +66,8 @@ const SettingsScreen = () => {
             }
             style={styles.profileImage}
           />
+          {/* User information or sign-in prompt */}
+          {/* If user is logged in, show their name and logout option */}
           {user ? (
             <View style={styles.userInfo}>
               <Text style={[styles.userName, { color: colors.text }]}>
@@ -74,6 +88,10 @@ const SettingsScreen = () => {
         </TouchableOpacity>
       )}
 
+  
+        {/* Render the active section if one is selected */}
+        {/* Also adds  a big teal button at the top to let you get back to thr settings */}
+
       {activeSection ? (
         <View style={styles.sectionContainer}>
           <TouchableOpacity
@@ -93,6 +111,8 @@ const SettingsScreen = () => {
               { backgroundColor: colors.cardBackground },
             ]}
           >
+            {            /* Settings items for different sections */
+            /* Each item is a touchable that sets the active section when pressed */}
             <SettingsItem
               icon="settings-outline"
               label="General"
@@ -121,6 +141,11 @@ const SettingsScreen = () => {
               { backgroundColor: colors.cardBackground },
             ]}
           >
+            {/* Additional settings items for help, feedback, and about sections */
+            /* Each item is a touchable that sets the active section when pressed */
+            /* they are seperated into two sections for better organization
+            also it looks better this way */}
+            
             <SettingsItem
               icon="help-circle-outline"
               label="Help & Feedback"
@@ -140,6 +165,9 @@ const SettingsScreen = () => {
         </>
       )}
 
+      {/* Authentication modal for signing in or signing up */}
+      {/* This modal is shown when the user is not logged in and presses the sign-in prompt */}
+      {/* It is also shown when the user presses the logout button */}
       <AuthModal
         visible={authModalVisible}
         onClose={() => setAuthModalVisible(false)}
@@ -150,6 +178,8 @@ const SettingsScreen = () => {
 
 import { Ionicons } from "@expo/vector-icons";
 
+// SettingsItem component
+// This component is responsible for rendering each item in the settings list
 const SettingsItem = ({
   icon,
   label,

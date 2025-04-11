@@ -3,6 +3,8 @@ import { View, Text, StyleSheet, Linking, TouchableOpacity } from 'react-native'
 import { Ionicons } from '@expo/vector-icons';
 import { useSettings } from '../context/SettingContext';
 
+// This component displays information about the app, including version, developer, and links to the website, privacy policy, and terms of service.
+// It uses the `useSettings` context to access the current theme colors for styling.
 const About = () => {
   const { colors } = useSettings();
 
@@ -14,6 +16,7 @@ const About = () => {
     termsOfService: '/terms',
   };
 
+  // shows off the info about the app
   return (
     <View style={[styles.container, { backgroundColor: colors.background }]}>
       <Text style={[styles.title, { color: colors.text }]}>About the App</Text>
@@ -43,6 +46,8 @@ const About = () => {
         style={styles.linkItem}
         onPress={() => Linking.openURL(appInfo.privacyPolicy)}
       >
+        {/* This icon is used to represent privacy policy  when pressed it leads to it*/}
+
         <Ionicons name="lock-closed-outline" size={24} color={colors.tint} />
         <Text style={[styles.linkText, { color: colors.text }]}>Privacy Policy</Text>
         <Ionicons name="chevron-forward" size={20} color={colors.tint} />
