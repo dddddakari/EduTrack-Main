@@ -1,6 +1,16 @@
 import React, { useState } from "react";
-import { View, Text, TouchableOpacity, StyleSheet, FlatList, Alert, TextInput, Modal } from "react-native";
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  StyleSheet,
+  FlatList,
+  Alert,
+  TextInput,
+  Modal,
+} from "react-native";
 import { Ionicons } from "@expo/vector-icons";
+import DateTimePicker from "@react-native-community/datetimepicker";
 import Fab from "@/components/edubutton";
 
 const InboxScreen = () => {
@@ -8,25 +18,33 @@ const InboxScreen = () => {
   const [modalVisible, setModalVisible] = useState(false);
   const [newTask, setNewTask] = useState("");
   const [editingIndex, setEditingIndex] = useState(null);
+  const [date, setDate] = useState(new Date());
+  const [showDatePicker, setShowDatePicker] = useState(false);
 
   const handleAddTask = () => {
     if (newTask.trim() === "") return;
 
+    const formattedDate = date.toLocaleString();
+
+    const taskObject = `${newTask} (Due: ${formattedDate})`;
+
     if (editingIndex !== null) {
       const updatedTasks = [...tasks];
-      updatedTasks[editingIndex] = newTask;
+      updatedTasks[editingIndex] = taskObject;
       setTasks(updatedTasks);
       setEditingIndex(null);
     } else {
-      setTasks([...tasks, newTask]);
+      setTasks([...tasks, taskObject]);
     }
 
     setNewTask("");
+    setDate(new Date());
     setModalVisible(false);
   };
 
   const handleEditTask = (index) => {
-    setNewTask(tasks[index]);
+    const rawText = tasks[index].split(" (Due: ")[0];
+    setNewTask(rawText);
     setEditingIndex(index);
     setModalVisible(true);
   };
@@ -66,7 +84,10 @@ const InboxScreen = () => {
                   <TouchableOpacity onPress={() => handleEditTask(index)}>
                     <Ionicons name="pencil" size={20} color="#17C3B2" />
                   </TouchableOpacity>
-                  <TouchableOpacity onPress={() => handleDeleteTask(index)} style={{ marginLeft: 10 }}>
+                  <TouchableOpacity
+                    onPress={() => handleDeleteTask(index)}
+                    style={{ marginLeft: 10 }}
+                  >
                     <Ionicons name="trash" size={20} color="red" />
                   </TouchableOpacity>
                 </View>
@@ -86,6 +107,7 @@ const InboxScreen = () => {
 
       <Fab onPress={() => setModalVisible(true)} tabBarHeight={40} />
 
+      {/* Modal for adding tasks */}
       <Modal
         visible={modalVisible}
         animationType="slide"
@@ -104,11 +126,45 @@ const InboxScreen = () => {
               placeholder="Enter task"
               style={styles.input}
             />
-            <TouchableOpacity style={styles.saveBtn} onPress={handleAddTask}>
-              <Text style={{ color: "#fff", fontWeight: "bold" }}>
-                {editingIndex !== null ? "Update Task" : "Add Task"}
+
+            <TouchableOpacity
+              onPress={() => setShowDatePicker(true)}
+              style={styles.input}
+            >
+              <Text>
+                {date.toLocaleString()}
               </Text>
             </TouchableOpacity>
+
+            {showDatePicker && (
+              <DateTimePicker
+                value={date}
+                mode="datetime"
+                display="default"
+                onChange={(event, selectedDate) => {
+                  setShowDatePicker(false);
+                  if (selectedDate) {
+                    setDate(selectedDate);
+                  }
+                }}
+              />
+            )}
+
+            <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
+              <TouchableOpacity style={[styles.saveBtn, { backgroundColor: "#ccc" }]} onPress={() => {
+                setModalVisible(false);
+                setEditingIndex(null);
+                setNewTask("");
+              }}>
+                <Text style={{ color: "#000", fontWeight: "bold" }}>Cancel</Text>
+              </TouchableOpacity>
+
+              <TouchableOpacity style={styles.saveBtn} onPress={handleAddTask}>
+                <Text style={{ color: "#fff", fontWeight: "bold" }}>
+                  {editingIndex !== null ? "Update Task" : "Add Task"}
+                </Text>
+              </TouchableOpacity>
+            </View>
           </View>
         </View>
       </Modal>
@@ -116,13 +172,12 @@ const InboxScreen = () => {
   );
 };
 
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#D4D2D5",
     padding: 20,
-    paddingTop: 50
+    paddingTop: 50,
   },
   header: {
     fontSize: 28,
@@ -209,6 +264,8 @@ const styles = StyleSheet.create({
     padding: 10,
     borderRadius: 8,
     alignItems: "center",
+    flex: 1,
+    marginLeft: 10,
   },
 });
 
