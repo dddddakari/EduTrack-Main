@@ -11,12 +11,19 @@ import TaskItem from "../../components/TaskItem";
 import { Ionicons } from "@expo/vector-icons";
 import TaskModal from "../../components/Task";
 
+// This is the main task list component that displays today's tasks, upcoming tasks, and completed tasks
+// It uses a FlatList to render the tasks in sections and includes a button to add new tasks
 export default function TaskList() {
   const { getTodaysTasks, getFutureTasks, getCompletedTasks, colors } =
     useSettings();
   const [modalVisible, setModalVisible] = useState(false);
 
+  // Function to render the task list
+  // It uses FlatList to display tasks in sections
   return (
+    // Main container for the task list
+    // TASKS are seperated by date and status
+    // Each section has a title and a list of tasks
     <View style={[styles.container, { backgroundColor: colors.background }]}>
       <FlatList
         data={[
@@ -37,6 +44,8 @@ export default function TaskList() {
         )}
       />
 
+      {/* Floating action button to add a new task */}
+      {/* It opens a modal to create a new task */}
       <TouchableOpacity
         style={[styles.addButton, { backgroundColor: colors.tint }]}
         onPress={() => setModalVisible(true)}

@@ -1,6 +1,10 @@
 import React, { createContext, useState, useContext } from 'react';
 import { ColorValue } from 'react-native/Libraries/StyleSheet/StyleSheet';
 
+// This file contains the SettingsContext and SettingsProvider for managing app settings, user data, and tasks.
+// It provides a context for dark mode, user authentication, and task management.
+// The SettingsProvider wraps the application and provides the context to its children components.
+// It also includes types for TaskInput, Task, and User to ensure type safety throughout the application.
 export type TaskInput = {
   title: string;
   description?: string;
@@ -27,6 +31,9 @@ export type User = {
   profileImage?: any;
 };
 
+// This type defines the structure of the SettingsContext, which includes properties for dark mode, user data, and task management functions.
+// It also includes methods for adding, toggling, deleting tasks, and getting tasks by date or status.
+// The context is used throughout the application to access and modify these settings and data.
 type SettingsContextType = {
   isDarkMode: boolean;
   setIsDarkMode: (value: boolean) => void;

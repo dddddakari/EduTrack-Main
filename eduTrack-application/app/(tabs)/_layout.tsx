@@ -8,9 +8,12 @@ import FontAwesome from "@expo/vector-icons/FontAwesome";
 import TabBarBackground from "@/components/ui/TabBarBackground";
 import { useSettings } from "../../context/SettingContext";
 
+// This is the main layout for the tab navigation in the app. It uses Expo Router's Tabs component to create a tabbed interface.
+
 export default function TabLayout() {
   const { colors } = useSettings();
 
+  
   return (
     <Tabs
       screenOptions={{

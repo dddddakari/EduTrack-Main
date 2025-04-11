@@ -5,6 +5,9 @@ import { Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import { TouchableOpacity } from "react-native-gesture-handler";
 
+// This component displays the Terms of Service for the application.
+// It includes sections on acceptance of terms, user responsibilities, prohibited uses, intellectual property, termination, and changes to terms.
+// The component uses the `useSettings` context to access the current theme colors for styling.
 const TermsOfService = () => {
   const { colors } = useSettings();
   const navigation = useNavigation();

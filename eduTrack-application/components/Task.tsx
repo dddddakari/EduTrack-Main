@@ -12,6 +12,11 @@ import { Ionicons } from "@expo/vector-icons";
 import DateTimePickerModal from "react-native-modal-datetime-picker"; // Import the modal datetime picker
 import { useSettings } from "../context/SettingContext";
 
+
+// This component is a modal for adding a new task.
+// It includes input fields for task title, date, and time.
+// The date and time picker is implemented using the react-native-modal-datetime-picker library.
+// The modal is displayed when the user clicks on the add task button in the task list screen.
 const TaskModal = ({
   visible,
   onClose,
@@ -24,6 +29,9 @@ const TaskModal = ({
   const [date, setDate] = useState(new Date());
   const [isPickerVisible, setPickerVisible] = useState(false);
 
+  // Function to handle the date and time selection
+  // It updates the date state with the selected date and time
+  // and closes the picker modal
   const handleAddTask = () => {
     if (title.trim()) {
       addTask({
@@ -48,6 +56,7 @@ const TaskModal = ({
     setPickerVisible(false); // Hide the picker after date selection
   };
 
+  // Function to show the date picker modal
   return (
     <Modal visible={visible} transparent animationType="slide">
       <View

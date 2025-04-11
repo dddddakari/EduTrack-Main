@@ -2,6 +2,11 @@ import React, { useState } from "react";
 import { View, Text, StyleSheet, Switch, ScrollView } from "react-native";
 import { useSettings } from "../context/SettingContext";
 
+// This component is for managing sound and notification settings in the app.
+// It allows users to enable or disable notifications, sounds, and vibration settings.
+// It uses the `useSettings` context to access the current theme colors for styling.
+// The component is structured with sections for notification settings and sound settings, each containing relevant switches and labels.
+
 const SoundsAndNotifications = () => {
   const { colors } = useSettings();
   const [notificationsEnabled, setNotificationsEnabled] = useState(true);

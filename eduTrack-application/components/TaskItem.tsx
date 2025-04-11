@@ -3,6 +3,11 @@ import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { useSettings } from "../context/SettingContext";
 
+
+// This component represents a single task item in the task list.
+// It displays the task title, date, time, and a checkbox to mark it as completed.
+// It also includes a delete button to remove the task from the list.
+// The component uses the `useSettings` context to access the current theme colors and task management functions.
 const TaskItem = ({ task }: { task: any }) => {
   const { colors, toggleTask, deleteTask } = useSettings();
 
@@ -18,6 +23,9 @@ const TaskItem = ({ task }: { task: any }) => {
         />
       </TouchableOpacity>
 
+    
+        {/* Task title and time */}
+        {/* The task title is displayed with a line-through style if the task is completed */}
       <View style={styles.taskContent}>
         <Text
           style={[
