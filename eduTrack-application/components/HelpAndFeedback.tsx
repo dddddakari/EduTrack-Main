@@ -1,58 +1,96 @@
-// components/HelpAndFeedback.tsx
-import React from 'react';
-import { View, Text, StyleSheet, ScrollView, Pressable, Alert, Linking } from 'react-native';
-import { useColorScheme } from '@/hooks/useColorScheme';
-import { Colors } from '@/constants/Colors';
-import { useSettings } from '../context/SettingContext';
+import React from "react";
+import {
+  View,
+  Text,
+  StyleSheet,
+  ScrollView,
+  Pressable,
+  Alert,
+  Linking,
+} from "react-native";
+import { useSettings } from "../context/SettingContext";
 
 export default function HelpAndFeedback() {
   const { colors } = useSettings();
 
   const handleFeedbackPress = () => {
-    const email = 'sonic@team.ca';
-    const subject = 'StudyPlanner Feedback';
-    const body = 'Hi team,\n\nHere is some feedback about the StudyPlanner app:\n\n';
-  
-    const emailUrl = `mailto:${email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-  
-    Linking.openURL(emailUrl).catch(err =>
-      Alert.alert('Error', 'Could not open email client. Please try again.')
+    const email = "sonic@team.ca";
+    const subject = "StudyPlanner Feedback";
+    const body =
+      "Hi team,\n\nHere is some feedback about the StudyPlanner app:\n\n";
+
+    const emailUrl = `mailto:${email}?subject=${encodeURIComponent(
+      subject
+    )}&body=${encodeURIComponent(body)}`;
+
+    Linking.openURL(emailUrl).catch((err) =>
+      Alert.alert("Error", "Could not open email client. Please try again.")
     );
   };
 
   return (
-    <ScrollView style={[styles.container, { backgroundColor: colors.background }]}>
-      <Text style={[styles.header, { color: colors.tint }]}>📚 Welcome to StudyPlanner!</Text>
-
-      <Text style={[styles.paragraph, { color: colors.text }]}>
-        StudyPlanner helps you organize your study sessions, tasks, and deadlines in a simple way:
+    <ScrollView
+      style={[styles.container, { backgroundColor: colors.background }]}
+    >
+      <Text style={[styles.header, { color: colors.tint }]}>
+        📚 Welcome to StudyPlanner!
       </Text>
 
-      <View style={[styles.stepCard, { backgroundColor: colors.cardBackground, borderColor: colors.tint }]}>
-        <Text style={[styles.stepTitle, { color: colors.tint }]}>1. Create Tasks</Text>
+      <Text style={[styles.paragraph, { color: colors.text }]}>
+        StudyPlanner helps you organize your study sessions, tasks, and
+        deadlines in a simple way:
+      </Text>
+
+      <View
+        style={[
+          styles.stepCard,
+          { backgroundColor: colors.cardBackground, borderColor: colors.tint },
+        ]}
+      >
+        <Text style={[styles.stepTitle, { color: colors.tint }]}>
+          1. Create Tasks
+        </Text>
         <Text style={[styles.stepText, { color: colors.text }]}>
-          Add subjects or assignments you need to study for, including due dates and estimated time.
+          Add subjects or assignments you need to study for, including due dates
+          and estimated time.
         </Text>
       </View>
 
-      <View style={[styles.stepCard, { backgroundColor: colors.cardBackground, borderColor: colors.tint }]}>
-        <Text style={[styles.stepTitle, { color: colors.tint }]}>2. Schedule Sessions</Text>
+      <View
+        style={[
+          styles.stepCard,
+          { backgroundColor: colors.cardBackground, borderColor: colors.tint },
+        ]}
+      >
+        <Text style={[styles.stepTitle, { color: colors.tint }]}>
+          2. Schedule Sessions
+        </Text>
         <Text style={[styles.stepText, { color: colors.text }]}>
           Plan your study blocks across your week using the calendar tab.
         </Text>
       </View>
 
-      <View style={[styles.stepCard, { backgroundColor: colors.cardBackground, borderColor: colors.tint }]}>
-        <Text style={[styles.stepTitle, { color: colors.tint }]}>3. Track Progress</Text>
+      <View
+        style={[
+          styles.stepCard,
+          { backgroundColor: colors.cardBackground, borderColor: colors.tint },
+        ]}
+      >
+        <Text style={[styles.stepTitle, { color: colors.tint }]}>
+          3. Track Progress
+        </Text>
         <Text style={[styles.stepText, { color: colors.text }]}>
           Check off completed tasks and keep track of what’s left.
         </Text>
       </View>
 
-      <Pressable style={({ pressed }) => [
-        styles.feedbackButton,
-        { backgroundColor: pressed ? colors.tabIconDefault : colors.tint },
-      ]} onPress={handleFeedbackPress}>
+      <Pressable
+        style={({ pressed }) => [
+          styles.feedbackButton,
+          { backgroundColor: pressed ? colors.tabIconDefault : colors.tint },
+        ]}
+        onPress={handleFeedbackPress}
+      >
         <Text style={styles.feedbackText}>Send Feedback 💌</Text>
       </Pressable>
 
@@ -70,14 +108,14 @@ const styles = StyleSheet.create({
   },
   header: {
     fontSize: 28,
-    fontWeight: 'bold',
+    fontWeight: "bold",
     marginBottom: 20,
-    textAlign: 'center',
+    textAlign: "center",
   },
   paragraph: {
     fontSize: 16,
     marginBottom: 20,
-    textAlign: 'center',
+    textAlign: "center",
   },
   stepCard: {
     borderWidth: 2,
@@ -87,7 +125,7 @@ const styles = StyleSheet.create({
   },
   stepTitle: {
     fontSize: 20,
-    fontWeight: 'bold',
+    fontWeight: "bold",
     marginBottom: 8,
   },
   stepText: {
@@ -96,17 +134,17 @@ const styles = StyleSheet.create({
   feedbackButton: {
     paddingVertical: 12,
     borderRadius: 12,
-    alignItems: 'center',
+    alignItems: "center",
     marginTop: 30,
     marginBottom: 20,
   },
   feedbackText: {
-    color: '#fff',
+    color: "#fff",
     fontSize: 16,
-    fontWeight: 'bold',
+    fontWeight: "bold",
   },
   backButton: {
-    alignItems: 'center',
+    alignItems: "center",
     marginTop: 10,
   },
 });

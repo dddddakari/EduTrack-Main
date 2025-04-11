@@ -1,7 +1,7 @@
-import React from 'react';
-import { TouchableOpacity, StyleSheet } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import React from "react";
+import { TouchableOpacity, StyleSheet } from "react-native";
+import { Ionicons } from "@expo/vector-icons";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 interface EduProps {
   onPress: () => void;
@@ -17,11 +17,11 @@ interface EduProps {
 
 const Fab: React.FC<EduProps> = ({
   onPress,
-  icon = 'add',
+  icon = "add",
   iconSize = 35,
-  iconColor = '#FFF',
+  iconColor = "#FFF",
   position = { bottom: 24, right: 24 },
-  tabBarHeight = 60
+  tabBarHeight = 60,
 }) => {
   const insets = useSafeAreaInsets();
 
@@ -32,8 +32,8 @@ const Fab: React.FC<EduProps> = ({
         styles.fab,
         {
           bottom: (position.bottom || 24) + tabBarHeight + insets.bottom,
-          right: position.right || 24
-        }
+          right: position.right || 24,
+        },
       ]}
     >
       <Ionicons name={icon as any} size={iconSize} color={iconColor} />
@@ -43,14 +43,14 @@ const Fab: React.FC<EduProps> = ({
 
 const styles = StyleSheet.create({
   fab: {
-    position: 'absolute',
-    backgroundColor: '#58355E',
+    position: "absolute",
+    backgroundColor: "#58355E",
     width: 70,
     height: 70,
     borderRadius: 40,
-    alignItems: 'center',
-    justifyContent: 'center',
-    shadowColor: '#000',
+    alignItems: "center",
+    justifyContent: "center",
+    shadowColor: "#000",
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.25,
     shadowRadius: 4,

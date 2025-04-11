@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
-import { View, Text, StyleSheet, Switch, ScrollView } from 'react-native';
-import { useSettings } from '../context/SettingContext';
+import React, { useState } from "react";
+import { View, Text, StyleSheet, Switch, ScrollView } from "react-native";
+import { useSettings } from "../context/SettingContext";
 
 const SoundsAndNotifications = () => {
   const { colors } = useSettings();
@@ -9,14 +9,22 @@ const SoundsAndNotifications = () => {
   const [vibrationEnabled, setVibrationEnabled] = useState(true);
 
   return (
-    <ScrollView style={[styles.container, { backgroundColor: colors.background }]}>
-      <Text style={[styles.title, { color: colors.text }]}>Sounds & Notifications</Text>
+    <ScrollView
+      style={[styles.container, { backgroundColor: colors.background }]}
+    >
+      <Text style={[styles.title, { color: colors.text }]}>
+        Sounds & Notifications
+      </Text>
 
       <View style={styles.section}>
-        <Text style={[styles.sectionTitle, { color: colors.text }]}>Notification Settings</Text>
-        
+        <Text style={[styles.sectionTitle, { color: colors.text }]}>
+          Notification Settings
+        </Text>
+
         <View style={styles.setting}>
-          <Text style={[styles.label, { color: colors.text }]}>Enable Notifications</Text>
+          <Text style={[styles.label, { color: colors.text }]}>
+            Enable Notifications
+          </Text>
           <Switch
             value={notificationsEnabled}
             onValueChange={setNotificationsEnabled}
@@ -25,7 +33,9 @@ const SoundsAndNotifications = () => {
         </View>
 
         <View style={styles.setting}>
-          <Text style={[styles.label, { color: colors.text }]}>Notification Sounds</Text>
+          <Text style={[styles.label, { color: colors.text }]}>
+            Notification Sounds
+          </Text>
           <Switch
             value={soundsEnabled}
             onValueChange={setSoundsEnabled}
@@ -44,8 +54,10 @@ const SoundsAndNotifications = () => {
       </View>
 
       <View style={styles.section}>
-        <Text style={[styles.sectionTitle, { color: colors.text }]}>Sound Settings</Text>
-        
+        <Text style={[styles.sectionTitle, { color: colors.text }]}>
+          Sound Settings
+        </Text>
+
         <View style={styles.setting}>
           <Text style={[styles.label, { color: colors.text }]}>App Sounds</Text>
           <Switch
@@ -72,7 +84,7 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 24,
-    fontWeight: 'bold',
+    fontWeight: "bold",
     marginBottom: 20,
   },
   section: {
@@ -80,23 +92,23 @@ const styles = StyleSheet.create({
   },
   sectionTitle: {
     fontSize: 18,
-    fontWeight: '600',
+    fontWeight: "600",
     marginBottom: 15,
   },
   setting: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
     paddingVertical: 12,
     borderBottomWidth: 1,
-    borderBottomColor: '#E5E5E5',
+    borderBottomColor: "#E5E5E5",
   },
   label: {
     fontSize: 16,
   },
   value: {
     fontSize: 16,
-    color: '#666',
+    color: "#666",
   },
 });
 
