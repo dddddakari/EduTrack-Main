@@ -1,149 +1,87 @@
-// components/TaskModal.tsx
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, Modal, Alert } from 'react-native';
-import { useSettings } from '../context/SettingContext';
+import { View, Text, TextInput, TouchableOpacity, Modal, StyleSheet, Platform } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import DateTimePicker from '@react-native-community/datetimepicker';
+import DateTimePickerModal from 'react-native-modal-datetime-picker'; // Import the modal datetime picker
+import { useSettings } from '../context/SettingContext';
 
 const TaskModal = ({ visible, onClose }: { visible: boolean; onClose: () => void }) => {
   const { colors, addTask } = useSettings();
   const [title, setTitle] = useState('');
-  const [description, setDescription] = useState('');
-  const [category, setCategory] = useState('Personal');
   const [date, setDate] = useState(new Date());
-  const [time, setTime] = useState(new Date());
-  const [showDatePicker, setShowDatePicker] = useState(false);
-  const [showTimePicker, setShowTimePicker] = useState(false);
+  const [isPickerVisible, setPickerVisible] = useState(false);
 
   const handleAddTask = () => {
-    if (!title.trim()) {
-      Alert.alert('Error', 'Please enter a task title');
-      return;
+    if (title.trim()) {
+      addTask({
+        title,
+        date: date.toISOString().split('T')[0],
+        time: date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+        category: 'Personal',
+        description: '',
+        completed: false,
+      });
+      setTitle('');
+      setDate(new Date());
+      onClose();
     }
+  };
 
-    const formattedDate = date.toISOString().split('T')[0];
-    const formattedTime = time.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-
-    addTask({
-      title,
-      description,
-      category,
-      date: formattedDate,
-      time: formattedTime
-    });
-
-    // Reset form
-    setTitle('');
-    setDescription('');
-    setCategory('Personal');
-    setDate(new Date());
-    setTime(new Date());
-    onClose();
+  const handleDateChange = (selectedDate: Date) => {
+    setDate(selectedDate);
+    setPickerVisible(false); // Hide the picker after date selection
   };
 
   return (
-    <Modal visible={visible} animationType="slide" transparent>
-      <View style={[styles.modalOverlay, { backgroundColor: 'rgba(0,0,0,0.5)' }]}>
-        <View style={[styles.modalContainer, { backgroundColor: colors.cardBackground }]}>
+    <Modal visible={visible} transparent animationType="slide">
+      <View style={[styles.modalContainer, { backgroundColor: 'rgba(0,0,0,0.5)' }]}>
+        <View style={[styles.modalContent, { backgroundColor: colors.cardBackground }]}>
           <Text style={[styles.title, { color: colors.text }]}>Add New Task</Text>
 
           <TextInput
-            style={[styles.input, { color: colors.text, borderColor: colors.tint }]}
-            placeholder="Title"
+            style={[styles.input, { 
+              color: colors.text, 
+              borderColor: colors.tint 
+            }]}
+            placeholder="Task title"
             placeholderTextColor="#999"
             value={title}
             onChangeText={setTitle}
           />
 
-          <TextInput
-            style={[styles.input, { color: colors.text, borderColor: colors.tint }]}
-            placeholder="Description (optional)"
-            placeholderTextColor="#999"
-            multiline
-            value={description}
-            onChangeText={setDescription}
-          />
-
-          <View style={[styles.input, { borderColor: colors.tint }]}>
-            <Text style={[styles.label, { color: colors.text }]}>Category:</Text>
-            <View style={styles.categoryContainer}>
-              {['Personal', 'Work', 'Study', 'Other'].map(cat => (
-                <TouchableOpacity
-                  key={cat}
-                  style={[
-                    styles.categoryButton,
-                    { 
-                      backgroundColor: category === cat ? colors.tint : colors.cardBackground,
-                      borderColor: colors.tint
-                    }
-                  ]}
-                  onPress={() => setCategory(cat)}
-                >
-                  <Text style={[styles.categoryText, { color: category === cat ? 'white' : colors.text }]}>
-                    {cat}
-                  </Text>
-                </TouchableOpacity>
-              ))}
-            </View>
-          </View>
-
           <TouchableOpacity
             style={[styles.dateButton, { borderColor: colors.tint }]}
-            onPress={() => setShowDatePicker(true)}
+            onPress={() => setPickerVisible(true)}
           >
             <Ionicons name="calendar" size={20} color={colors.tint} />
             <Text style={[styles.dateText, { color: colors.text }]}>
-              {date.toLocaleDateString()}
+              {date.toLocaleDateString()} at {date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
             </Text>
           </TouchableOpacity>
 
-          <TouchableOpacity
-            style={[styles.dateButton, { borderColor: colors.tint }]}
-            onPress={() => setShowTimePicker(true)}
-          >
-            <Ionicons name="time" size={20} color={colors.tint} />
-            <Text style={[styles.dateText, { color: colors.text }]}>
-              {time.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-            </Text>
-          </TouchableOpacity>
+          {/* Use DateTimePickerModal instead */}
+          <DateTimePickerModal
+            isVisible={isPickerVisible}
+            mode="datetime"
+            date={date}
+            onConfirm={handleDateChange}
+            onCancel={() => setPickerVisible(false)} // Close the picker without changing the date
+          />
 
-          {showDatePicker && (
-            <DateTimePicker
-              value={date}
-              mode="date"
-              display="default"
-              onChange={(event, selectedDate) => {
-                setShowDatePicker(false);
-                if (selectedDate) setDate(selectedDate);
-              }}
-            />
-          )}
+          <View style={styles.buttonRow}>
+            <TouchableOpacity 
+              style={[styles.button, { backgroundColor: '#ccc' }]}
+              onPress={onClose}
+            >
+              <Text style={styles.buttonText}>Cancel</Text>
+            </TouchableOpacity>
 
-          {showTimePicker && (
-            <DateTimePicker
-              value={time}
-              mode="time"
-              display="default"
-              onChange={(event, selectedTime) => {
-                setShowTimePicker(false);
-                if (selectedTime) setTime(selectedTime);
-              }}
-            />
-          )}
-
-          <TouchableOpacity
-            style={[styles.addButton, { backgroundColor: colors.tint }]}
-            onPress={handleAddTask}
-          >
-            <Text style={styles.buttonText}>Add Task</Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity 
-            style={styles.closeButton}
-            onPress={onClose}
-          >
-            <Text style={[styles.closeText, { color: colors.text }]}>Cancel</Text>
-          </TouchableOpacity>
+            <TouchableOpacity 
+              style={[styles.button, { backgroundColor: colors.tint }]}
+              onPress={handleAddTask}
+            >
+              <Text style={[styles.buttonText, { color: 'white' }]}>Add Task</Text>
+            </TouchableOpacity>
+          </View>
         </View>
       </View>
     </Modal>
@@ -151,84 +89,54 @@ const TaskModal = ({ visible, onClose }: { visible: boolean; onClose: () => void
 };
 
 const styles = StyleSheet.create({
-  modalOverlay: {
+  modalContainer: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
   },
-  modalContainer: {
+  modalContent: {
     width: '90%',
     padding: 20,
     borderRadius: 10,
   },
   title: {
-    fontSize: 22,
+    fontSize: 20,
     fontWeight: 'bold',
     marginBottom: 20,
     textAlign: 'center',
   },
   input: {
-    height: 50,
     borderWidth: 1,
     borderRadius: 8,
-    paddingHorizontal: 15,
+    padding: 15,
     marginBottom: 15,
     fontSize: 16,
-    justifyContent: 'center',
-  },
-  label: {
-    position: 'absolute',
-    top: -10,
-    left: 10,
-    backgroundColor: 'white',
-    paddingHorizontal: 5,
-    fontSize: 12,
-  },
-  categoryContainer: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    marginTop: 10,
-  },
-  categoryButton: {
-    padding: 8,
-    borderRadius: 15,
-    borderWidth: 1,
-    marginRight: 8,
-    marginBottom: 8,
-  },
-  categoryText: {
-    fontSize: 14,
   },
   dateButton: {
     flexDirection: 'row',
     alignItems: 'center',
-    height: 50,
     borderWidth: 1,
     borderRadius: 8,
-    paddingHorizontal: 15,
-    marginBottom: 15,
+    padding: 15,
+    marginBottom: 20,
   },
   dateText: {
     marginLeft: 10,
     fontSize: 16,
   },
-  addButton: {
+  buttonRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  button: {
+    flex: 1,
     padding: 15,
     borderRadius: 8,
     alignItems: 'center',
-    marginBottom: 10,
+    marginHorizontal: 5,
   },
   buttonText: {
-    color: 'white',
     fontWeight: 'bold',
-    fontSize: 16,
-  },
-  closeButton: {
-    alignItems: 'center',
-    padding: 10,
-  },
-  closeText: {
-    fontSize: 16,
   },
 });
 

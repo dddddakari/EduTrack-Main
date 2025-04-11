@@ -1,270 +1,70 @@
-import React, { useState } from "react";
-import {
-  View,
-  Text,
-  TouchableOpacity,
-  StyleSheet,
-  FlatList,
-  Alert,
-  TextInput,
-  Modal,
-} from "react-native";
-import { Ionicons } from "@expo/vector-icons";
-import DateTimePicker from '@react-native-community/datetimepicker';
-import Fab from "@/components/edubutton";
+import React, { useState } from 'react';
+import { View, Text, FlatList, StyleSheet, TouchableOpacity } from 'react-native';
+import { useSettings } from '../../context/SettingContext';
+import TaskItem from '../../components/TaskItem';
+import { Ionicons } from '@expo/vector-icons';
+import TaskModal from '../../components/Task';
 
-export default function InboxScreen() {
-  const [tasks, setTasks] = useState<string[]>([]); 
-  const [modalVisible, setModalVisible] = useState<boolean>(false);
-  const [newTask, setNewTask] = useState<string>("");
-  const [editingIndex, setEditingIndex] = useState<number | null>(null);
-  const [date, setDate] = useState<Date>(new Date());
-  const [showDatePicker, setShowDatePicker] = useState<boolean>(false);
-
-
-  const handleAddTask = () => {
-    if (newTask.trim() === "") return;
-
-    const formattedDate = date.toLocaleString();
-
-    const taskObject = `${newTask} (Due: ${formattedDate})`;
-
-    if (editingIndex !== null) {
-      const updatedTasks = [...tasks];
-      updatedTasks[editingIndex] = taskObject;
-      setTasks(updatedTasks);
-      setEditingIndex(null);
-    } else {
-      setTasks([...tasks, taskObject]);
-    }
-
-    setNewTask("");
-    setDate(new Date());
-    setModalVisible(false);
-  };
-  const handleEditTask = (index: number) => {
-    const rawText = tasks[index].split(" (Due: ")[0];
-    setNewTask(rawText);
-    setEditingIndex(index);
-    setModalVisible(true);
-  };
-
-  const handleDeleteTask = (index: number) => {
-    Alert.alert("Delete Task", "Are you sure you want to delete this task?", [
-      { text: "Cancel", style: "cancel" },
-      {
-        text: "Delete",
-        style: "destructive",
-        onPress: () => setTasks(tasks.filter((_, i) => i !== index)),
-      },
-    ]);
-  };
+export default function TaskList() {
+  const { getTodaysTasks, getFutureTasks, getCompletedTasks, colors } = useSettings();
+  const [modalVisible, setModalVisible] = useState(false);
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.header}>Tasks</Text>
-
-      <View style={styles.content}>
-        {tasks.length === 0 ? (
-          <>
-            <Ionicons name="grid" size={60} color="#17C3B2" />
-            <Text style={styles.title}>New Tasks</Text>
-            <Text style={styles.description}>
-              It's time to set a new task! Start Now!
-            </Text>
-          </>
-        ) : (
-          <FlatList
-            data={tasks}
-            keyExtractor={(item, index) => index.toString()}
-            renderItem={({ item, index }) => (
-              <View style={styles.taskItem}>
-                <Text style={styles.taskText}>{item}</Text>
-                <View style={styles.taskActions}>
-                  <TouchableOpacity onPress={() => handleEditTask(index)}>
-                    <Ionicons name="pencil" size={20} color="#17C3B2" />
-                  </TouchableOpacity>
-                  <TouchableOpacity
-                    onPress={() => handleDeleteTask(index)}
-                    style={{ marginLeft: 10 }}
-                  >
-                    <Ionicons name="trash" size={20} color="red" />
-                  </TouchableOpacity>
-                </View>
-              </View>
-            )}
-          />
-        )}
-
-        <TouchableOpacity
-          style={styles.newTaskButton}
-          onPress={() => setModalVisible(true)}
-        >
-          <Ionicons name="add-circle" size={20} color="white" />
-          <Text style={styles.newTaskText}>New Inbox Task</Text>
-        </TouchableOpacity>
-      </View>
-
-      <Fab onPress={() => setModalVisible(true)} tabBarHeight={40} />
-
-      {/* Modal for adding tasks */}
-      <Modal
-        visible={modalVisible}
-        animationType="slide"
-        transparent
-        onRequestClose={() => {
-          setModalVisible(false);
-          setEditingIndex(null);
-          setNewTask("");
-        }}
-      >
-        <View style={styles.modalContainer}>
-          <View style={styles.modalContent}>
-            <TextInput
-              value={newTask}
-              onChangeText={setNewTask}
-              placeholder="Enter task"
-              style={styles.input}
-            />
-
-            <TouchableOpacity
-              onPress={() => setShowDatePicker(true)}
-              style={styles.input}
-            >
-              <Text>
-                {date.toLocaleString()}
-              </Text>
-            </TouchableOpacity>
-
-            {showDatePicker && (
-              <DateTimePicker
-                value={date}
-                mode="datetime"
-                display="default"
-                onChange={(event, selectedDate) => {
-                  setShowDatePicker(false);
-                  if (selectedDate) {
-                    setDate(selectedDate);
-                  }
-                }}
-              />
-            )}
-
-            <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
-              <TouchableOpacity style={[styles.saveBtn, { backgroundColor: "#ccc" }]} onPress={() => {
-                setModalVisible(false);
-                setEditingIndex(null);
-                setNewTask("");
-              }}>
-                <Text style={{ color: "#000", fontWeight: "bold" }}>Cancel</Text>
-              </TouchableOpacity>
-
-              <TouchableOpacity style={styles.saveBtn} onPress={handleAddTask}>
-                <Text style={{ color: "#fff", fontWeight: "bold" }}>
-                  {editingIndex !== null ? "Update Task" : "Add Task"}
-                </Text>
-              </TouchableOpacity>
-            </View>
+    <View style={[styles.container, { backgroundColor: colors.background }]}>
+      <FlatList
+        data={[
+          { title: "Today's Tasks", data: getTodaysTasks() },
+          { title: "Upcoming Tasks", data: getFutureTasks() },
+          { title: "Completed Tasks", data: getCompletedTasks() }
+        ]}
+        keyExtractor={(item) => item.title}
+        renderItem={({ item }) => (
+          <View style={styles.section}>
+            <Text style={[styles.sectionTitle, { color: colors.text }]}>{item.title}</Text>
+            {item.data.map(task => (
+              <TaskItem key={task.id} task={task} />
+            ))}
           </View>
-        </View>
-      </Modal>
+        )}
+      />
+
+      <TouchableOpacity 
+        style={[styles.addButton, { backgroundColor: colors.tint }]}
+        onPress={() => setModalVisible(true)}
+      >
+        <Ionicons name="add" size={24} color="white" />
+      </TouchableOpacity>
+
+      <TaskModal 
+        visible={modalVisible} 
+        onClose={() => setModalVisible(false)} 
+      />
     </View>
   );
-};
+}
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#D4D2D5",
-    padding: 20,
-    paddingTop: 50,
+  container: { 
+    flex: 1, 
+    padding: 20 
   },
-  header: {
-    fontSize: 28,
-    fontWeight: "bold",
-    color: "#58355E",
+  section: { 
+    marginBottom: 20 
   },
-  content: {
-    alignItems: "center",
-    justifyContent: "center",
-    flex: 1,
+  sectionTitle: { 
+    fontSize: 18, 
+    fontWeight: 'bold', 
+    marginBottom: 10 
   },
-  title: {
-    fontSize: 18,
-    fontWeight: "bold",
-    color: "#58355E",
-    marginTop: 10,
-  },
-  description: {
-    textAlign: "center",
-    color: "#58355E",
-    marginVertical: 10,
-  },
-  newTaskButton: {
-    flexDirection: "row",
-    alignItems: "center",
-    backgroundColor: "#17C3B2",
-    padding: 12,
-    borderRadius: 12,
-    marginTop: 20,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.2,
-    shadowRadius: 3,
-  },
-  newTaskText: {
-    color: "white",
-    fontWeight: "bold",
-    marginLeft: 5,
-    fontSize: 16,
-  },
-  Fab: {
-    position: "absolute",
-    bottom: 20,
+  addButton: {
+    position: 'absolute',
     right: 20,
-    color: "#17C3B2",
-  },
-  taskItem: {
-    backgroundColor: "#fff",
-    padding: 12,
-    marginVertical: 6,
-    borderRadius: 10,
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-  },
-  taskText: {
-    fontSize: 16,
-    color: "#333",
-  },
-  taskActions: {
-    flexDirection: "row",
-  },
-  modalContainer: {
-    flex: 1,
-    backgroundColor: "rgba(0,0,0,0.3)",
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  modalContent: {
-    backgroundColor: "#fff",
-    padding: 20,
-    width: "80%",
-    borderRadius: 12,
-  },
-  input: {
-    borderWidth: 1,
-    borderColor: "#ccc",
-    borderRadius: 8,
-    padding: 10,
-    marginBottom: 12,
-  },
-  saveBtn: {
-    backgroundColor: "#17C3B2",
-    padding: 10,
-    borderRadius: 8,
-    alignItems: "center",
-    flex: 1,
-    marginLeft: 10,
+    bottom: 20,
+    width: 56,
+    height: 56,
+    borderRadius: 28,
+    alignItems: 'center',
+    justifyContent: 'center',
+    elevation: 4,
   },
 });

@@ -1,6 +1,15 @@
 import React, { createContext, useState, useContext } from 'react';
 import { ColorValue } from 'react-native/Libraries/StyleSheet/StyleSheet';
 
+export type TaskInput = {
+  title: string;
+  description?: string;
+  date: string;
+  time: string;
+  category: string;
+  completed: boolean;
+};
+
 export type Task = {
   id: string;
   title: string;
@@ -11,7 +20,6 @@ export type Task = {
   completed: boolean;
 };
 
-export type TaskInput = Omit<Task, 'id' | 'completed'>;
 
 export type User = {
   name: string;
@@ -40,6 +48,9 @@ type SettingsContextType = {
   toggleTask: (id: string) => void;
   deleteTask: (id: string) => void;
   getTasksByDate: (date: string) => Task[];
+  getTodaysTasks: () => Task[];
+  getFutureTasks: () => Task[];
+  getCompletedTasks: () => Task[];
 };
 
 export const SettingsContext = createContext<SettingsContextType | undefined>(undefined);
@@ -81,6 +92,21 @@ export const SettingsProvider = ({ children }: { children: React.ReactNode }) =>
     return tasks.filter(task => task.date === date);
   };
 
+  const getTodaysTasks = (): Task[] => {
+    const today = new Date().toISOString().split('T')[0];
+    return tasks.filter(task => task.date === today && !task.completed);
+  };
+
+  const getFutureTasks = (): Task[] => {
+    const today = new Date().toISOString().split('T')[0];
+    return tasks.filter(task => task.date > today && !task.completed)
+      .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
+  };
+
+  const getCompletedTasks = (): Task[] => {
+    return tasks.filter(task => task.completed);
+  };
+
   return (
     <SettingsContext.Provider value={{ 
       isDarkMode, 
@@ -95,7 +121,10 @@ export const SettingsProvider = ({ children }: { children: React.ReactNode }) =>
       addTask,
       toggleTask,
       deleteTask,
-      getTasksByDate
+      getTasksByDate,
+      getTodaysTasks,
+      getFutureTasks,
+      getCompletedTasks
     }}>
       {children}
     </SettingsContext.Provider>
