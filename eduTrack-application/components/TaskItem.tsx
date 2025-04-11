@@ -1,26 +1,33 @@
-import React from 'react';
-import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
-import { useSettings } from '../context/SettingContext';
+import React from "react";
+import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
+import { Ionicons } from "@expo/vector-icons";
+import { useSettings } from "../context/SettingContext";
 
 const TaskItem = ({ task }: { task: any }) => {
   const { colors, toggleTask, deleteTask } = useSettings();
 
   return (
-    <View style={[styles.taskContainer, { backgroundColor: colors.cardBackground }]}>
+    <View
+      style={[styles.taskContainer, { backgroundColor: colors.cardBackground }]}
+    >
       <TouchableOpacity onPress={() => toggleTask(task.id)}>
-        <Ionicons 
-          name={task.completed ? "checkbox" : "square-outline"} 
-          size={24} 
-          color={task.completed ? "green" : colors.text} 
+        <Ionicons
+          name={task.completed ? "checkbox" : "square-outline"}
+          size={24}
+          color={task.completed ? "green" : colors.text}
         />
       </TouchableOpacity>
 
       <View style={styles.taskContent}>
-        <Text style={[styles.taskTitle, { 
-          color: colors.text,
-          textDecorationLine: task.completed ? 'line-through' : 'none'
-        }]}>
+        <Text
+          style={[
+            styles.taskTitle,
+            {
+              color: colors.text,
+              textDecorationLine: task.completed ? "line-through" : "none",
+            },
+          ]}
+        >
           {task.title}
         </Text>
         <Text style={[styles.taskTime, { color: colors.text }]}>
@@ -37,8 +44,8 @@ const TaskItem = ({ task }: { task: any }) => {
 
 const styles = StyleSheet.create({
   taskContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
     padding: 15,
     borderRadius: 10,
     marginBottom: 10,
@@ -49,7 +56,7 @@ const styles = StyleSheet.create({
   },
   taskTitle: {
     fontSize: 16,
-    fontWeight: '500',
+    fontWeight: "500",
   },
   taskTime: {
     fontSize: 12,

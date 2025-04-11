@@ -1,40 +1,42 @@
-import React from 'react';
-import { View, Text, StyleSheet, Pressable, ScrollView } from 'react-native';
-import { useSettings } from '../context/SettingContext';
+import React from "react";
+import { View, Text, StyleSheet, Pressable, ScrollView } from "react-native";
+import { useSettings } from "../context/SettingContext";
 
 export default function PricingPage() {
   const { colors } = useSettings();
 
   const plans = [
     {
-      title: '🥇 Gold Plan',
-      price: '$1,000,000',
-      description: 'Basic access to our golden nonsense.',
+      title: "🥇 Gold Plan",
+      price: "$1,000,000",
+      description: "Basic access to our golden nonsense.",
     },
     {
-      title: '💎 Diamond Plan',
-      price: '$10,000,000',
-      description: 'You shine bright with this bling-tier access.',
+      title: "💎 Diamond Plan",
+      price: "$10,000,000",
+      description: "You shine bright with this bling-tier access.",
     },
     {
-      title: '🛸 Alien Ultra Plan',
-      price: '$100,000,000',
-      description: 'Includes abduction insurance and intergalactic support.',
+      title: "🛸 Alien Ultra Plan",
+      price: "$100,000,000",
+      description: "Includes abduction insurance and intergalactic support.",
     },
     {
-      title: '🚀 NASA+ Plan',
-      price: '$999,999,999',
-      description: 'Comes with a Mars ticket. Maybe.',
+      title: "🚀 NASA+ Plan",
+      price: "$999,999,999",
+      description: "Comes with a Mars ticket. Maybe.",
     },
   ];
 
   return (
-    <ScrollView 
+    <ScrollView
       style={{ backgroundColor: colors.background }}
       contentContainerStyle={styles.scrollContainer}
     >
       <View style={styles.header}>
-        <Text style={[styles.title, { color: colors.text }]}>Our Modest Pricing</Text>
+        <Text style={[styles.title, { color: colors.text }]}>
+          Our Modest Pricing
+        </Text>
       </View>
 
       <View style={styles.plansContainer}>
@@ -42,21 +44,29 @@ export default function PricingPage() {
           <View
             key={index}
             style={[
-              styles.card, 
-              { 
-                backgroundColor: colors.cardBackground, 
-                borderColor: colors.tint 
-              }
+              styles.card,
+              {
+                backgroundColor: colors.cardBackground,
+                borderColor: colors.tint,
+              },
             ]}
           >
-            <Text style={[styles.planTitle, { color: colors.tint }]}>{plan.title}</Text>
-            <Text style={[styles.price, { color: colors.text }]}>{plan.price}</Text>
-            <Text style={[styles.description, { color: colors.text }]}>{plan.description}</Text>
+            <Text style={[styles.planTitle, { color: colors.tint }]}>
+              {plan.title}
+            </Text>
+            <Text style={[styles.price, { color: colors.text }]}>
+              {plan.price}
+            </Text>
+            <Text style={[styles.description, { color: colors.text }]}>
+              {plan.description}
+            </Text>
             <Pressable
               style={({ pressed }) => [
                 styles.button,
                 {
-                  backgroundColor: pressed ? colors.tabIconDefault : colors.tint,
+                  backgroundColor: pressed
+                    ? colors.tabIconDefault
+                    : colors.tint,
                 },
               ]}
               onPress={() => alert(`Subscribed to ${plan.title}`)}
@@ -88,8 +98,8 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 30,
-    fontWeight: 'bold',
-    textAlign: 'center',
+    fontWeight: "bold",
+    textAlign: "center",
   },
   plansContainer: {
     paddingHorizontal: 15,
@@ -99,19 +109,19 @@ const styles = StyleSheet.create({
     borderRadius: 16,
     padding: 20,
     marginBottom: 20,
-    shadowColor: '#000',
+    shadowColor: "#000",
     shadowOpacity: 0.1,
     shadowRadius: 10,
     elevation: 4,
   },
   planTitle: {
     fontSize: 24,
-    fontWeight: 'bold',
+    fontWeight: "bold",
     marginBottom: 10,
   },
   price: {
     fontSize: 20,
-    fontWeight: '600',
+    fontWeight: "600",
     marginBottom: 8,
   },
   description: {
@@ -121,11 +131,11 @@ const styles = StyleSheet.create({
   button: {
     paddingVertical: 12,
     borderRadius: 12,
-    alignItems: 'center',
+    alignItems: "center",
   },
   buttonText: {
-    color: '#fff',
-    fontWeight: 'bold',
+    color: "#fff",
+    fontWeight: "bold",
     fontSize: 16,
   },
   footer: {
@@ -134,7 +144,7 @@ const styles = StyleSheet.create({
   },
   footerText: {
     fontSize: 14,
-    textAlign: 'center',
-    fontStyle: 'italic',
+    textAlign: "center",
+    fontStyle: "italic",
   },
 });
