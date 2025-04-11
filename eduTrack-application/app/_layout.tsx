@@ -9,7 +9,6 @@ const LayoutContent = () => {
   return (
     <>
       <StatusBar barStyle={isDarkMode ? "light-content" : "dark-content"} />
-      {/* Global container */}
       <View style={{ flex: 1 }}>
         <Slot />
       </View>

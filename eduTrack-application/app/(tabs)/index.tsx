@@ -1,81 +1,67 @@
-// app/index.tsx
-import React from "react";
-import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
+
+import React, { useState } from "react";
+import { View, Text, TouchableOpacity, StyleSheet, ScrollView } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import Fab from "@/components/edubutton";
-import { useSettings } from '../context/SettingContext';
+import { useSettings } from "../context/SettingContext";
+import TaskModal from "../../components/Task";
+import TaskItem from "../../components/TaskItem";
 
 const InboxScreen = () => {
-  const { colors } = useSettings();
+  const { colors, tasks, toggleTask, deleteTask } = useSettings();
+  const [modalVisible, setModalVisible] = useState(false);
+
+  const completedTasks = tasks.filter((task: any) => task.completed);
+  const incompleteTasks = tasks.filter((task: any) => !task.completed);
 
   return (
     <View style={[styles.container, { backgroundColor: colors.background }]}>
       <Text style={[styles.header, { color: colors.text }]}>Tasks</Text>
 
-      <View style={styles.content}>
-        <Ionicons name="grid" size={60} color={colors.tint} />
-        <Text style={[styles.title, { color: colors.text }]}>New Tasks</Text>
-        <Text style={[styles.description, { color: colors.text }]}>
-          It's time to set a new task! Start Now!
-        </Text>
+      <ScrollView contentContainerStyle={styles.scrollContainer}>
+        {incompleteTasks.length > 0 && (
+          <>
+            <Text style={[styles.sectionHeader, { color: colors.text }]}>To Do</Text>
+            {incompleteTasks.map((task: any) => (
+              <TaskItem key={task.id} task={task} onToggle={toggleTask} onDelete={deleteTask} />
+            ))}
+          </>
+        )}
 
-        <TouchableOpacity style={[styles.newTaskButton, { backgroundColor: colors.tint }]}>
-          <Ionicons name="add-circle" size={20} color="white" />
-          <Text style={styles.newTaskText}>New Inbox Task</Text>
-        </TouchableOpacity>
-      </View>
+        {completedTasks.length > 0 && (
+          <>
+            <Text style={[styles.sectionHeader, { color: colors.text }]}>Completed</Text>
+            {completedTasks.map((task: any) => (
+              <TaskItem key={task.id} task={task} onToggle={toggleTask} onDelete={deleteTask} />
+            ))}
+          </>
+        )}
 
-      <Fab onPress={() => console.log("Create new post")} tabBarHeight={40} />
+        {tasks.length === 0 && (
+          <View style={styles.emptyState}>
+            <Ionicons name="grid" size={60} color={colors.tint} />
+            <Text style={[styles.title, { color: colors.text }]}>No Tasks Yet</Text>
+            <Text style={[styles.description, { color: colors.text }]}>
+              It's time to set a new task! Start Now!
+            </Text>
+          </View>
+        )}
+      </ScrollView>
+
+      <Fab onPress={() => setModalVisible(true)} tabBarHeight={40} />
+      <TaskModal visible={modalVisible} onClose={() => setModalVisible(false)} />
     </View>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    padding: 20,
-    paddingTop: 50
-  },
-  header: {
-    fontSize: 28,
-    fontWeight: "bold",
-  },
-  content: {
-    alignItems: "center",
-    justifyContent: "center",
-    flex: 1,
-  },
-  title: {
-    fontSize: 18,
-    fontWeight: "bold",
-    marginTop: 10,
-  },
-  description: {
-    textAlign: "center",
-    marginVertical: 10,
-  },
-  newTaskButton: {
-    flexDirection: "row",
-    alignItems: "center",
-    padding: 12,
-    borderRadius: 12,
-    marginTop: 20,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.2,
-    shadowRadius: 3,
-  },
-  newTaskText: {
-    color: "white",
-    fontWeight: "bold",
-    marginLeft: 5,
-    fontSize: 16,
-  },
-  Fab: {
-    position: "absolute",
-    bottom: 20,
-    right: 20,
-  },
+  container: { flex: 1, padding: 20, paddingTop: 50 },
+  header: { fontSize: 28, fontWeight: "bold", marginBottom: 20 },
+  scrollContainer: { paddingBottom: 80 },
+  sectionHeader: { fontSize: 20, fontWeight: "600", marginTop: 20, marginBottom: 10 },
+  emptyState: { flex: 1, alignItems: "center", justifyContent: "center", paddingTop: 100 },
+  title: { fontSize: 18, fontWeight: "bold", marginTop: 10 },
+  description: { textAlign: "center", marginVertical: 10 },
 });
 
 export default InboxScreen;

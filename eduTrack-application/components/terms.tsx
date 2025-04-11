@@ -16,7 +16,7 @@ const TermsOfService = () => {
           <Ionicons name="arrow-back" size={24} color={colors.tint} />
         </TouchableOpacity>
         <Text style={[styles.title, { color: colors.text }]}>Terms of Service</Text>
-        <View style={{ width: 24 }} /> {/* Spacer for alignment */}
+        <View style={{ width: 24 }} />
       </View>
 
       <ScrollView contentContainerStyle={styles.content}>

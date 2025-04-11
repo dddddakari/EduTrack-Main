@@ -22,6 +22,7 @@ const AuthModal = ({ visible, onClose }: { visible: boolean; onClose: () => void
       return;
     }
 
+
     setUser({
       name: name || email.split('@')[0], // Use name or first part of email
       email: email
