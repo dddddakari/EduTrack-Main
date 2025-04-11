@@ -1,83 +1,70 @@
-import React from "react";
-import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
-import { Ionicons } from "@expo/vector-icons";
-import Fab from "@/components/edubutton";
+import React, { useState } from 'react';
+import { View, Text, FlatList, StyleSheet, TouchableOpacity } from 'react-native';
+import { useSettings } from '../../context/SettingContext';
+import TaskItem from '../../components/TaskItem';
+import { Ionicons } from '@expo/vector-icons';
+import TaskModal from '../../components/Task';
 
-const InboxScreen = () => {
+export default function TaskList() {
+  const { getTodaysTasks, getFutureTasks, getCompletedTasks, colors } = useSettings();
+  const [modalVisible, setModalVisible] = useState(false);
+
   return (
-    <View style={styles.container}>
-      <Text style={styles.header}>Tasks</Text>
+    <View style={[styles.container, { backgroundColor: colors.background }]}>
+      <FlatList
+        data={[
+          { title: "Today's Tasks", data: getTodaysTasks() },
+          { title: "Upcoming Tasks", data: getFutureTasks() },
+          { title: "Completed Tasks", data: getCompletedTasks() }
+        ]}
+        keyExtractor={(item) => item.title}
+        renderItem={({ item }) => (
+          <View style={styles.section}>
+            <Text style={[styles.sectionTitle, { color: colors.text }]}>{item.title}</Text>
+            {item.data.map(task => (
+              <TaskItem key={task.id} task={task} />
+            ))}
+          </View>
+        )}
+      />
 
-      <View style={styles.content}>
-        <Ionicons name="grid" size={60} color="#17C3B2" />
-        <Text style={styles.title}>New Tasks</Text>
-        <Text style={styles.description}>
-          It's time to set a new task! Start Now!
-        </Text>
+      <TouchableOpacity 
+        style={[styles.addButton, { backgroundColor: colors.tint }]}
+        onPress={() => setModalVisible(true)}
+      >
+        <Ionicons name="add" size={24} color="white" />
+      </TouchableOpacity>
 
-        <TouchableOpacity style={styles.newTaskButton}>
-          <Ionicons name="add-circle" size={20} color="white" />
-          <Text style={styles.newTaskText}>New Inbox Task</Text>
-        </TouchableOpacity>
-      </View>
-
-      <Fab onPress={() => console.log("Create new post")} tabBarHeight={40} />
+      <TaskModal 
+        visible={modalVisible} 
+        onClose={() => setModalVisible(false)} 
+      />
     </View>
   );
-};
+}
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#D4D2D5",
-    padding: 20,
-    paddingTop: 50
+  container: { 
+    flex: 1, 
+    padding: 20 
   },
-  header: {
-    fontSize: 28,
-    fontWeight: "bold",
-    color: "#58355E",
+  section: { 
+    marginBottom: 20 
   },
-  content: {
-    alignItems: "center",
-    justifyContent: "center",
-    flex: 1,
+  sectionTitle: { 
+    fontSize: 18, 
+    fontWeight: 'bold', 
+    marginBottom: 10 
   },
-  title: {
-    fontSize: 18,
-    fontWeight: "bold",
-    color: "#58355E",
-    marginTop: 10,
-  },
-  description: {
-    textAlign: "center",
-    color: "#58355E",
-    marginVertical: 10,
-  },
-  newTaskButton: {
-    flexDirection: "row",
-    alignItems: "center",
-    backgroundColor: "#17C3B2",
-    padding: 12,
-    borderRadius: 12,
-    marginTop: 20,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.2,
-    shadowRadius: 3,
-  },
-  newTaskText: {
-    color: "white",
-    fontWeight: "bold",
-    marginLeft: 5,
-    fontSize: 16,
-  },
-  Fab: {
-    position: "absolute",
-    bottom: 20,
+  addButton: {
+    position: 'absolute',
     right: 20,
-    color: "#17C3B2",
+    bottom: 20,
+    width: 56,
+    height: 56,
+    borderRadius: 28,
+    alignItems: 'center',
+    justifyContent: 'center',
+    elevation: 4,
   },
 });
-
-export default InboxScreen;

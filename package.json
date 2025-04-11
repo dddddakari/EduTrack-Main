@@ -6,7 +6,7 @@
     "yarn": "^1.22.22",
     "react-native": "0.76.9"
   },
-  "name": "EduTrack-Main",
+  "name": "edutrack-application",
   "version": "1.0.0",
   "scripts": {
     "android": "expo run:android",
